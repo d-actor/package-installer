@@ -1,0 +1,22 @@
+{
+  "name": "pscode_challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d-actor/package-installer.git"
+  },
+  "author": "Dan Actor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d-actor/package-installer/issues"
+  },
+  "homepage": "https://github.com/d-actor/package-installer#readme"
+}

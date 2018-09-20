@@ -7,7 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "start": "npm run build && node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/d-actor/package-installer/issues"
   },
-  "homepage": "https://github.com/d-actor/package-installer#readme"
+  "homepage": "https://github.com/d-actor/package-installer#readme",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
 }

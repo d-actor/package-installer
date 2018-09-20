@@ -1,8 +1,8 @@
-## Package Installer
+# Package Installer
 
 Coding exercise
 
-# Usage
+## Usage
 
 `npm install` to install dependencies
 

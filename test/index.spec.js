@@ -11,13 +11,15 @@ describe('Package Installer', () => {
     }).toThrow("Input is not an array")
   });
 
-  it('should work for a small number of packages', () => {
+  it('should return valid order for two packages', () => {
     let testInput = [
-      { name: "packageInstaller", dependencies: ["jest"] },
-      { name: "jest" }
+      { name: "packageInstaller", dependencies: "jest" },
+      { name: "jest" },
     ]
-    let expected = ["jest", "packageInstaller"]
-
+    let expected = [
+      { name:"jest" },
+      { name: "packageInstaller", dependencies: "jest"},
+    ]
     expect(packageInstaller(testInput)).toEqual(expected)
   });
 

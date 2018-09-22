@@ -20,7 +20,7 @@ const packageInstaller = (d) => {
 
   for ( let i = 0; i <= deps.length; i++) {
     for (let compare of deps.slice(1)) {
-      if (deps[0][1] === compare[0]) {
+      if (deps[0][1] === compare[0] && !deps.slice(2).includes(compare[1])) {
         result.push(compare[0])
         deps.splice(1, 1)
       } else {

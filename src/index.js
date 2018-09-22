@@ -3,23 +3,18 @@ const packageInstaller = (d) => {
   if (!Array.isArray(d)) throw "Input is not an array"
 
   const result = []
-  const noDeps = []
-//  const viewed = []
 
   d.forEach(pckg => {
     if (!pckg.dependencies) {
-      noDeps.unshift(pckg)
+      result.push(pckg)
       d.splice(d.indexOf(pckg));
     }
   })
 
-  while (d.length) {
-    if (noDeps.length) {
-      result.push(noDeps[0])
-      noDeps.shift()
-    }
-    result.push(d[0]) && d.shift()
+  for (let i in d) {
+    result.push(d[i]) && d.shift()
   }
+  console.log(result)
   return result
 }
 

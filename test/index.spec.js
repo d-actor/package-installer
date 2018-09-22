@@ -12,15 +12,15 @@ describe('Package Installer', () => {
   });
 
   it('should return valid order for two packages', () => {
-    let testInput = [
-      { name: "packageInstaller", dependencies: "jest" },
-      { name: "jest" },
-    ]
-    let expected = [
-      { name:"jest" },
-      { name: "packageInstaller", dependencies: "jest"},
-    ]
+    let testInput = [ "KittenService: CamelCaser", "CamelCaser: " ]
+    let expected = ["CamelCaser, KittenService"]
     expect(packageInstaller(testInput)).toEqual(expected)
+  });
+
+  it('should return valid order for multiple packages', () => {
+    let testInput = [ "KittenService: ", "Leetmeme: Cyberportal", "Cyberportal: Ice", "CamelCaser: KittenService", "Fraudstream: Leetmeme", "Ice: "]
+    let expected = ["KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream"]
+		expect(packageInstaller(testInput)).toEqual(expected)
   });
 
 });

@@ -4,7 +4,7 @@ Coding exercise
 
 ## Usage
 
-`npm install` to install dependencies
+`yarn` to install dependencies
 
-`npm run test` to run tests
+`yarn run test` to run tests
 

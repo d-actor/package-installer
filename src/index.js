@@ -3,19 +3,18 @@ const packageInstaller = (d) => {
   if (!Array.isArray(d)) throw "Input is not an array"
 
   const result = []
+  const split = []
 
   d.forEach(pckg => {
-    if (!pckg.dependencies) {
-      result.push(pckg)
-      d.splice(d.indexOf(pckg));
-    }
+    pckg = pckg.split(':')
+    console.log(pckg)
+    if (pckg[1] === ' ') {
+      result.push(pckg[0])
+    } else split.push(pckg)
   })
+  result.push(split[0][0])
 
-  for (let i in d) {
-    result.push(d[i]) && d.shift()
-  }
-  console.log(result)
-  return result
+  return result.join(', ').split()
 }
 
 module.exports = packageInstaller;

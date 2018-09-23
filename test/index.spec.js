@@ -25,7 +25,9 @@ describe('Package Installer', () => {
 
   it('should throw error if input contains a cycle', () => {
     let testInput = [ "KittenService: ", "Leetmeme: Cyberportal", "Cyberportal: Ice", "CamelCaser: KittenService", "Fraudstream: ", "Ice: Leetmeme" ]
-    expect(packageInstaller(testInput)).toThrow("Invalid input, contains a cycle.")
+    expect( () => {
+      packageInstaller(testInput)
+    }).toThrow("Invalid input, contains a cycle.")
   });
 });
 

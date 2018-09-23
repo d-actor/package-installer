@@ -12,11 +12,6 @@ const packageInstaller = (d) => {
     } else deps.push(pckg)
   })
 
-  if (deps.length === 1) {
-    result.push(deps[0][0])
-    return result.join(', ').split()
-  }
-
   function Graph() {
     this.adjList = {}
   }

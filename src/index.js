@@ -16,7 +16,7 @@ const packageInstaller = (d) => {
     this.adjList[v1].push(v2)
   }
 
-  Graph.prototype.sort = function() {
+  Graph.prototype.sortPckgs = function() {
     const nodes = Object.keys(this.adjList)
     const sortVisited = {}
     const cycleVisited = {}
@@ -85,7 +85,7 @@ const packageInstaller = (d) => {
 
   const graph = new Graph()
   buildGraph(splitStrings(d), graph)
-  graph.sort()
+  graph.sortPckgs()
 
   return result.join(', ').split()
 }

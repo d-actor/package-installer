@@ -18,10 +18,13 @@ const packageInstaller = (d) => {
 
   Graph.prototype.sort = function() {
     const nodes = Object.keys(this.adjList)
-    const visited = {}
+    const sortVisited = {}
+    const cycleVisited = {}
+    const recStack = {}
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i]
-      this._sortUtil(node, visited)
+      this._sortUtil(node, sortVisited)
+      this._cycleUtil(node, cycleVisited, recStack)
     }
     nodes.forEach(node => {
       !result.includes(node) && result.push(node)
@@ -41,18 +44,7 @@ const packageInstaller = (d) => {
     } else result.push(vertex)
   }
 
-  Graph.prototype.detectCycle = function() {
-    const nodes = Object.keys(this.adjList)
-    const visited = {}
-    const recStack = {}
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i]
-      if (this._detectCycleUtil(node, visited, recStack))
-        throw "Invalid input, contains a cycle."
-    }
-  }
-
-  Graph.prototype._detectCycleUtil = function(vertex, visited, recStack) {
+  Graph.prototype._cycleUtil = function(vertex, visited, recStack) {
     if(!visited[vertex]) {
       visited[vertex] = true
       recStack[vertex] = true
@@ -60,10 +52,10 @@ const packageInstaller = (d) => {
       if (nodeNeighbors) {
         for(let i = 0; i < nodeNeighbors.length; i++) {
           const currentNode = nodeNeighbors[i]
-          if(!visited[currentNode] && this._detectCycleUtil(currentNode, visited, recStack)) {
-            return true
+          if(!visited[currentNode] && this._cycleUtil(currentNode, visited, recStack)) {
+            throw "Invalid input, contains a cycle."
           } else if (recStack[currentNode]) {
-            return true
+            throw "Invalid input, contains a cycle."
           }
         }
       }
@@ -93,7 +85,6 @@ const packageInstaller = (d) => {
 
   const graph = new Graph()
   buildGraph(splitStrings(d), graph)
-  graph.detectCycle()
   graph.sort()
 
   return result.join(', ').split()

@@ -3,24 +3,16 @@ const packageInstaller = (d) => {
   if (!Array.isArray(d)) throw "Input is not an array"
 
   const result = []
-  const deps = []
-
-  d.forEach(pckg => {
-    pckg = pckg.split(': ')
-    if (!pckg[1]) {
-      result.push(pckg[0])
-    } else deps.push(pckg)
-  })
 
   function Graph() {
     this.adjList = {}
   }
 
-  Graph.prototype.addVertex = function (v) {
+  Graph.prototype.addVertex = function(v) {
     this.adjList[v] = []
   }
 
-  Graph.prototype.addEdge = function (v1,v2) {
+  Graph.prototype.addEdge = function(v1,v2) {
     this.adjList[v1].push(v2)
   }
 
@@ -88,8 +80,19 @@ const packageInstaller = (d) => {
     return graph
   }
 
+  const splitStrings = (d) => {
+    const deps = []
+    d.forEach(pckg => {
+      pckg = pckg.split(': ')
+      if (!pckg[1]) {
+        result.push(pckg[0])
+      } else deps.push(pckg)
+    })
+    return deps
+  }
+
   const graph = new Graph()
-  buildGraph(deps, graph)
+  buildGraph(splitStrings(d), graph)
   graph.detectCycle()
   graph.sort()
 

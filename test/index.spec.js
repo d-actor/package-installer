@@ -20,7 +20,7 @@ describe('Package Installer', () => {
   it('should return valid order for multiple packages', () => {
     let testInput = [ "KittenService: ", "Leetmeme: Cyberportal", "Cyberportal: Ice", "CamelCaser: KittenService", "Fraudstream: Leetmeme", "Ice: "]
     let expected = ["KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream"]
-		expect(packageInstaller(testInput)).toEqual(expected)
+    expect(packageInstaller(testInput)).toEqual(expected)
   });
 
   it('should throw error if input contains a cycle', () => {

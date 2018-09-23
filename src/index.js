@@ -12,8 +12,6 @@ const packageInstaller = (d) => {
     } else deps.push(pckg)
   })
 
-  console.log(deps)
-
   if (deps.length === 1) {
     result.push(deps[0][0])
     return result.join(', ').split()
@@ -31,35 +29,60 @@ const packageInstaller = (d) => {
     this.adjList[v1].push(v2)
   }
 
-  Graph.prototype._detectCycleUtil = function(vertex, visited, recStack) {
-    if(!visited[vertex]) {
+  Graph.prototype.sort = function() {
+    const nodes = Object.keys(this.adjList)
+    const visited = {}
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i]
+      this._sortUtil(node, visited)
+    }
+    nodes.forEach(node => {
+      !result.includes(node) && result.push(node)
+    })
+  }
+
+  Graph.prototype._sortUtil = function(vertex, visited) {
+    if (!visited[vertex]) {
       visited[vertex] = true
-      recStack[vertex] = true
-      const nodeNeighbors = this.adjList[vertex]
-      for(let i = 0; i < nodeNeighbors.length; i++) {
-        const currentNode = nodeNeighbors[i]
-        if(!visited[currentNode] && this._detectCycleUtil(currentNode, visited, recStack)) {
-          return true
-        } else if (recStack[currentNode]) {
-          return true
+      const neighbors = this.adjList[vertex]
+      if (neighbors) {
+        for (let i = 0; i < neighbors.length; i++) {
+          const neighbor = neighbors[i]
+            this._sortUtil(neighbor, visited)
         }
       }
-    }
-    recStack[vertex] = false
-    return false;
+    } else result.push(vertex)
   }
 
   Graph.prototype.detectCycle = function() {
     const nodes = Object.keys(this.adjList)
     const visited = {}
     const recStack = {}
-
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i]
       if (this._detectCycleUtil(node, visited, recStack))
         throw "Invalid input, contains a cycle."
     }
-    return 'no cycle'
+  }
+
+  Graph.prototype._detectCycleUtil = function(vertex, visited, recStack) {
+    if(!visited[vertex]) {
+      visited[vertex] = true
+      recStack[vertex] = true
+      const nodeNeighbors = this.adjList[vertex]
+      if (nodeNeighbors) {
+        for(let i = 0; i < nodeNeighbors.length; i++) {
+          const currentNode = nodeNeighbors[i]
+          if(!visited[currentNode] && this._detectCycleUtil(currentNode, visited, recStack)) {
+            return true
+          } else if (recStack[currentNode]) {
+            return true
+          }
+        }
+      }
+    }
+    recStack[vertex] = false
+    return false;
   }
 
   const buildGraph = (deps, graph) => {
@@ -73,21 +96,7 @@ const packageInstaller = (d) => {
   const graph = new Graph()
   buildGraph(deps, graph)
   graph.detectCycle()
-
-
-  for ( let i = 0; i <= deps.length; i++) {
-    for (let compare of deps.slice(1)) {
-      if (false) {
-      } else if (deps[0][1] === compare[0] && !deps.slice(2).includes(compare[1])) {
-        result.push(compare[0])
-        deps.splice(1, 1)
-      } else {
-        result.push(deps[0] [0])
-        deps.splice(0, 1)
-      }
-    }
-  }
-  result.push(deps[0][0])
+  graph.sort()
 
   return result.join(', ').split()
 }

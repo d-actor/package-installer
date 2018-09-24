@@ -1,30 +1,30 @@
-const packageInstaller = (d) => {
-  if (!d) return null
-  if (!Array.isArray(d)) throw "Input is not an array"
+const packageInstaller = (packagesList) => {
+  if (!packagesList) return null
+  if (!Array.isArray(packagesList)) throw "Input is not an array"
 
   const result = []
 
   function Graph() {
-    this.adjList = {}
+    this.adjacencyList = {}
   }
 
-  Graph.prototype.addVertex = function(v) {
-    this.adjList[v] = []
+  Graph.prototype.addVertex = function(vertex) {
+    this.adjacencyList[vertex] = []
   }
 
-  Graph.prototype.addEdge = function(v1,v2) {
-    this.adjList[v1].push(v2)
+  Graph.prototype.addEdge = function(vertex1,vertex2) {
+    this.adjacencyList[vertex1].push(vertex2)
   }
 
   Graph.prototype.sortPckgs = function() {
-    const nodes = Object.keys(this.adjList)
+    const nodes = Object.keys(this.adjacencyList)
     const sortVisited = {}
     const cycleVisited = {}
-    const recStack = {}
+    const recursionStack = {}
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i]
       this._sortUtil(node, sortVisited)
-      this._cycleUtil(node, cycleVisited, recStack)
+      this._cycleUtil(node, cycleVisited, recursionStack)
     }
     nodes.forEach(node => {
       !result.includes(node) && result.push(node)
@@ -34,47 +34,47 @@ const packageInstaller = (d) => {
   Graph.prototype._sortUtil = function(vertex, visited) {
     if (!visited[vertex]) {
       visited[vertex] = true
-      const neighbors = this.adjList[vertex]
+      const neighbors = this.adjacencyList[vertex]
       if (neighbors) {
         for (let i = 0; i < neighbors.length; i++) {
           const neighbor = neighbors[i]
-            this._sortUtil(neighbor, visited)
+          this._sortUtil(neighbor, visited)
         }
       }
     } else result.push(vertex)
   }
 
-  Graph.prototype._cycleUtil = function(vertex, visited, recStack) {
+  Graph.prototype._cycleUtil = function(vertex, visited, recursionStack) {
     if(!visited[vertex]) {
       visited[vertex] = true
-      recStack[vertex] = true
-      const nodeNeighbors = this.adjList[vertex]
-      if (nodeNeighbors) {
-        for(let i = 0; i < nodeNeighbors.length; i++) {
-          const currentNode = nodeNeighbors[i]
-          if(!visited[currentNode] && this._cycleUtil(currentNode, visited, recStack)) {
+      recursionStack[vertex] = true
+      const neighbors = this.adjacencyList[vertex]
+      if (neighbors) {
+        for(let i = 0; i < neighbors.length; i++) {
+          const neighbor = neighbors[i]
+          if(!visited[neighbor] && this._cycleUtil(neighbor, visited, recursionStack)) {
             throw "Invalid input, contains a cycle."
-          } else if (recStack[currentNode]) {
+          } else if (recursionStack[neighbor]) {
             throw "Invalid input, contains a cycle."
           }
         }
       }
     }
-    recStack[vertex] = false
+    recursionStack[vertex] = false
     return false;
   }
 
-  const buildGraph = (deps, graph) => {
-    deps.map(pckg => {
+  const buildGraph = (packages, graph) => {
+    packages.map(pckg => {
       graph.addVertex(pckg[0])
       graph.addEdge(pckg[0], pckg[1])
     })
     return graph
   }
 
-  const splitStrings = (d) => {
+  const splitStrings = (arr) => {
     const deps = []
-    d.forEach(pckg => {
+    arr.forEach(pckg => {
       pckg = pckg.split(': ')
       if (!pckg[1]) {
         result.push(pckg[0])
@@ -84,7 +84,7 @@ const packageInstaller = (d) => {
   }
 
   const graph = new Graph()
-  buildGraph(splitStrings(d), graph)
+  buildGraph(splitStrings(packagesList), graph)
   graph.sortPckgs()
 
   return result.join(', ').split()
